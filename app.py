@@ -7,6 +7,17 @@ st.set_page_config(
 )
 
 st.title("🧠 Visual Instruction Builder")
+st.info(
+    "This app uses multimodal AI to understand objects from images and generate "
+    "clear, human-friendly instructions. Useful for everyday objects, tools, "
+    "appliances, vehicles, and more."
+)
+st.markdown(
+    "**Try prompts like:**\n"
+    "- *How do I use this?*\n"
+    "- *Identify this object and explain it*\n"
+    "- *How can I fix this?*\n"
+)
 st.write(
     "Upload an image of any object and describe what you want to do. "
     "Gemini 3 will generate step-by-step instructions."
@@ -22,8 +33,13 @@ task = st.text_input(
     placeholder="e.g. How to clean this, how to assemble it, how to fix it..."
 )
 
-if uploaded_image and task and st.button("Generate instructions"):
-    with st.spinner("Analyzing image and generating steps..."):
+generate_clicked = st.button(
+    "Generate instructions",
+    disabled=not (uploaded_image and task)
+)
+
+if generate_clicked:
+    with st.spinner("Analyzing the image and generating instructions..."):
         instructions = generate_instructions(uploaded_image, task)
 
     st.subheader("📋 Step-by-Step Instructions")
