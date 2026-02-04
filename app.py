@@ -19,15 +19,24 @@ uploaded_image = st.file_uploader(
 
 task = st.text_input(
     "What do you want to do with this object?",
-    placeholder="e.g. How to use this, how to assemble, how to fix..."
+    placeholder="e.g. How to clean this, how to assemble it, how to fix it..."
 )
 
-if uploaded_image and task:
-    st.image(uploaded_image, caption="Uploaded Image", use_container_width=True)
+if uploaded_image and task and st.button("Generate instructions"):
+    with st.spinner("Analyzing image and generating steps..."):
+        instructions = generate_instructions(uploaded_image, task)
 
-    if st.button("Generate Instructions"):
-        with st.spinner("Gemini 3 is thinking..."):
-            instructions = generate_instructions(uploaded_image, task)
+    st.subheader("📋 Step-by-Step Instructions")
+    st.markdown(instructions)
 
-        st.subheader("📋 Step-by-Step Instructions")
-        st.markdown(instructions)
+    st.image(
+        uploaded_image,
+        caption="Uploaded Image",
+        width="stretch"
+    )
+    
+    st.caption("🤖 Powered by the all new Gemini 3")
+    st.info("Tip: Ask clear, concise questions for best results.")
+
+    
+
