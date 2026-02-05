@@ -2,7 +2,17 @@
 
 **Visual Instruction Builder** is an AI-powered web app that allows users to upload an image of any real-world object and receive **step-by-step, beginner-friendly instructions** tailored to their task.
 
-Traditional manuals, online videos, or generic guides often fail to address specific models or scenarios. This app uses **cutting-edge AI** to analyze images and generate actionable, safe, and clear instructions.
+Traditional manuals, online videos, or generic guides often fail to address specific models or scenarios.
+
+This app uses **cutting-edge AI** to analyze images and generate actionable, safe, and clear instructions.
+
+---
+
+## 👉 Try it
+
+Upload an image, describe what you want to do, and get instant step-by-step instructions.
+
+[Open Live Demo](https://image-to-instructions-ai.streamlit.app/)
 
 ---
 
@@ -48,20 +58,12 @@ To become a universal tool for learning **“how to use anything”** , supporti
 
 ---
 
-## 🏗️ Workflow
+## 🤖 Gemini Integration
 
-```mermaid
-flowchart TD
-    A[User uploads image] --> B[User enters task description]
-    B --> C[App sends image + task to Gemini 3 API]
-    C --> D[AI analyzes image and interprets task]
-    D --> E[Step-by-step instructions generated]
-    E --> F[Instructions displayed in Streamlit UI]
-    F --> G[Optional safety notes shown]
+This project uses Google's **Gemini multimodal models** to analyze images and generate instructions.
 
-```
-
-This flow diagram shows the **entire process** from image upload to instruction display.
+- **Gemini 3.0 Pro** – advanced reasoning and image understanding
+- **Gemini 2.5 Pro** – stable, fast alternative
 
 ---
 
@@ -69,12 +71,13 @@ This flow diagram shows the **entire process** from image upload to instruction 
 
 **Included in v1:**
 
-- Image upload (jpg/png, max 200MB)
+- Image upload (jpg/png)
 - AI-based object analysis
 - User task prompt input
 - Step-by-step instruction generation
 - Safety warnings
 - Optional logging of tokens used
+- Public image URL support 🔍
 
 **Excluded in v1:**
 
@@ -87,12 +90,9 @@ This flow diagram shows the **entire process** from image upload to instruction 
 
 ## 🧭 v2 Roadmap (Planned)
 
-- Mobile deployment for iOS and Android 📱
-- Offline caching of instructions 🗂️
-- Expanded object recognition library 🔍
-- AR-based step visualization 🕶️
+- Exportable instructions (PDF/Markdown)📄
 - Multi-language support 🌐
-- Exportable instructions (PDF/HTML) 📄
+- Mobile-friendly UI📱
 
 ---
 
@@ -157,6 +157,23 @@ streamlit run app.py
 3. Connect your GitHub repo and branch
 4. Add **Secrets** : `GEMINI_API_KEY=YOUR_API_KEY`
 5. Deploy and access your live demo
+
+---
+
+## 🏗️ Workflow
+
+```mermaid
+flowchart TD
+    A[User uploads image] --> B[User enters task description]
+    B --> C[App sends image + task to Gemini 3 API]
+    C --> D[AI analyzes image and interprets task]
+    D --> E[Step-by-step instructions generated]
+    E --> F[Instructions displayed in Streamlit UI]
+    F --> G[Optional safety notes shown]
+
+```
+
+This flow diagram shows the **entire process** from image upload to instruction display. Judges can quickly visualize how the app works.
 
 ---
 

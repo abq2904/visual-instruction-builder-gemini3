@@ -1,15 +1,11 @@
 import os
+import requests
+from io import BytesIO
 from PIL import Image
 from google import genai
 
 
-MODEL_NAME = "models/gemini-2.5-pro"  # Tier 1 compatible
-
-
 def get_client():
-    """
-    Lazily initialize the Gemini client to avoid failures at import time.
-    """
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY environment variable is not set")
@@ -17,12 +13,29 @@ def get_client():
     return genai.Client(api_key=api_key)
 
 
-def generate_instructions(image_file, task: str) -> str:
+def load_image(image_file=None, image_url=None) -> Image.Image:
     """
-    Generate step-by-step visual instructions for a given image and user task.
+    Load image from uploaded file or public URL.
     """
+    if image_file:
+        return Image.open(image_file).convert("RGB")
+
+    if image_url:
+        response = requests.get(image_url, timeout=10)
+        response.raise_for_status()
+        return Image.open(BytesIO(response.content)).convert("RGB")
+
+    raise ValueError("No image source provided")
+
+
+def generate_instructions(
+    task: str,
+    model_name: str,
+    image_file=None,
+    image_url=None
+) -> str:
     client = get_client()
-    image = Image.open(image_file)
+    image = load_image(image_file=image_file, image_url=image_url)
 
     system_prompt = (
         "You are an expert visual instructor.\n\n"
@@ -44,19 +57,12 @@ def generate_instructions(image_file, task: str) -> str:
     )
 
     response = client.models.generate_content(
-        model=MODEL_NAME,
+        model=model_name,
         contents=[
             image,
             system_prompt,
             f"Task: {task}"
         ]
     )
-
-    # Optional debug info (safe if unavailable)
-    token_usage = getattr(response, "token_usage", None)
-    if token_usage:
-        print("Tokens used:", token_usage)
-    else:
-        print("Tokens used: N/A")
 
     return response.text
