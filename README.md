@@ -61,7 +61,7 @@ flowchart TD
 
 ```
 
-This flow diagram shows the **entire process** from image upload to instruction display. Judges can quickly visualize how the app works.
+This flow diagram shows the **entire process** from image upload to instruction display.
 
 ---
 
