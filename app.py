@@ -161,7 +161,7 @@ if generate_clicked:
         except Exception as e:
             # Fallback to 2.5 Pro if 3.0 Pro fails
             if "PERMISSION_DENIED" in str(e) or "3.0" in selected_model:
-                fallback_model = MODEL_MAP["Gemini 2.5 Pro"]
+                fallback_model = MODEL_MAP["Gemini 2.5 Pro (Stable)"]
                 st.warning(f"⚠️ {model_choice} not available, using Gemini 2.5 Pro instead.")
                 instructions = generate_instructions(
                     task=task,
