@@ -16,6 +16,14 @@ Upload an image, describe what you want to do, and get instant step-by-step inst
 
 ---
 
+## 🎥 Demo
+
+Watch a short walkthrough of the Visual Instruction Builder:
+
+👉 [Demo Video](https://youtu.be/nCubeThfFwU)
+
+---
+
 ## 🚀 Project Overview
 
 Many people struggle when using unfamiliar objects, gadgets, or tools because:
