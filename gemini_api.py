@@ -3,6 +3,7 @@ import requests
 from io import BytesIO
 from PIL import Image
 from google import genai
+from google.genai.errors import ClientError
 
 
 def get_client():
@@ -56,13 +57,21 @@ def generate_instructions(
         "- Optional safety note at the end"
     )
 
-    response = client.models.generate_content(
-        model=model_name,
-        contents=[
-            image,
-            system_prompt,
-            f"Task: {task}"
-        ]
-    )
+    try:
+        response = client.models.generate_content(
+            model=model_name,
+            contents=[image, system_prompt, f"Task: {task}"]
+        )
+    except ClientError as e:
+        # Fallback if 3.0 Pro fails
+        if "PERMISSION_DENIED" in str(e):
+            fallback_model = "models/gemini-2.5-pro"
+            print(f"⚠️  {model_name} not accessible. Falling back to {fallback_model}")
+            response = client.models.generate_content(
+                model=fallback_model,
+                contents=[image, system_prompt, f"Task: {task}"]
+            )
+        else:
+            raise  # re-raise other errors
 
     return response.text

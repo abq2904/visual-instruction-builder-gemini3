@@ -73,7 +73,7 @@ st.subheader("🤖 Select AI Model")
 
 model_choice = st.radio(
     "Choose which Gemini model to use for generating instructions:",
-    options=["Gemini 3.0 Pro", "Gemini 2.5 Pro"],
+    options=["Gemini 3.0 Pro (Experimental)", "Gemini 2.5 Pro (Stable)"],
     index=0
 )
 
@@ -83,8 +83,8 @@ st.markdown(
 )
 
 MODEL_MAP = {
-    "Gemini 3.0 Pro": "models/gemini-3.0-pro",
-    "Gemini 2.5 Pro": "models/gemini-2.5-pro",
+    "Gemini 3.0 Pro (Experimental)": "models/gemini-3.0-pro-preview",
+    "Gemini 2.5 Pro (Stable)": "models/gemini-2.5-pro",
 }
 
 selected_model = MODEL_MAP[model_choice]
@@ -100,7 +100,7 @@ st.info(
 
 st.markdown(
     f"📌 Upload an image or paste a public image URL and describe your task.  \n"
-    f"**{model_choice}** will generate clear, step-by-step instructions."
+    f"Gemini will generate clear, step-by-step instructions."
 )
 
 # ---------------- Image Input ----------------
@@ -150,20 +150,40 @@ generate_clicked = st.button(
 # ---------------- Output ----------------
 if generate_clicked:
     with st.spinner(f"🤖 Analyzing image with {model_choice}..."):
-        instructions = generate_instructions(
-            task=task,
-            model_name=selected_model,
-            image_file=uploaded_image,
-            image_url=image_url
-        )
+        try:
+            # Attempt the selected model
+            instructions = generate_instructions(
+                task=task,
+                model_name=selected_model,
+                image_file=uploaded_image,
+                image_url=image_url
+            )
+        except Exception as e:
+            # Fallback to 2.5 Pro if 3.0 Pro fails
+            if "PERMISSION_DENIED" in str(e) or "3.0" in selected_model:
+                fallback_model = MODEL_MAP["Gemini 2.5 Pro"]
+                st.warning(f"⚠️ {model_choice} not available, using Gemini 2.5 Pro instead.")
+                instructions = generate_instructions(
+                    task=task,
+                    model_name=fallback_model,
+                    image_file=uploaded_image,
+                    image_url=image_url
+                )
+                model_choice = "Gemini 2.5 Pro"
+                selected_model = fallback_model
+            else:
+                st.error(f"❌ Error: {e}")
+                instructions = None
 
-    st.subheader("📋 Step-by-Step Instructions")
-    st.markdown(instructions)
+    if instructions:
+        st.subheader("📋 Step-by-Step Instructions")
+        st.markdown(instructions)
 
-    if uploaded_image:
-        st.image(uploaded_image, caption="📎 Uploaded Image", width="stretch")
-    else:
-        st.image(image_url, caption="🌐 Image from URL", width="stretch")
+        if uploaded_image:
+            st.image(uploaded_image, caption="📎 Uploaded Image", width="stretch")
+        else:
+            st.image(image_url, caption="🌐 Image from URL", width="stretch")
 
-    st.caption(f"🤖 Powered by {model_choice}")
-    st.info("💡 Tip: Ask clear, concise questions for best results.")
+        st.caption(f"🤖 Powered by Gemini")
+        st.info("💡 Tip: Ask clear, concise questions for best results.")
+
