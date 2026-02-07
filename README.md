@@ -181,7 +181,7 @@ flowchart TD
 
 ```
 
-This flow diagram shows the **entire process** from image upload to instruction display. Judges can quickly visualize how the app works.
+This flow diagram shows the **entire process** from image upload to instruction display. One can quickly visualize how the app works.
 
 ---
 
@@ -191,7 +191,7 @@ This flow diagram shows the **entire process** from image upload to instruction 
 - **Modular:** Easy to extend features and AI models
 - **Safe:** Includes warnings when relevant
 - **Professional:** Clean code, proper logging, and versioning
-- **Contest-ready:** Minimal, functional, and visually demonstrable
+- **Deploy-ready:** Minimal, functional, and visually demonstrable
 
 ---
 
